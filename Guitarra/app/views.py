@@ -11,6 +11,9 @@ from app.forms import AmplificadorFormulario
 from app.forms import EfectoFormulario
 
 from app.forms import BuscaElectricaForm
+from app.forms import BuscaAcusticaForm
+from app.forms import BuscaAmplificadorForm
+from app.forms import BuscaEfectoForm
 
 # Create your views here.
 def inicio(request):
@@ -90,3 +93,48 @@ def buscar_electricas(request):
         el_formulario = BuscaElectricaForm()
 
     return render(request, "app/buscar_electricas.html", {"el_formulario": el_formulario})
+
+def buscar_acusticas(request):
+    if request.method == "POST":
+        ac_formulario = BuscaAcusticaForm(request.POST) 
+
+        if ac_formulario.is_valid():
+            informacion = ac_formulario.cleaned_data
+            
+            acusticas = Acustica.objects.filter(marca__icontains=informacion["marca"])
+
+            return render(request, "app/mostrar_acusticas.html", {"marcas": acusticas})
+    else:
+        ac_formulario = BuscaAcusticaForm()
+
+    return render(request, "app/buscar_acusticas.html", {"ac_formulario": ac_formulario})
+
+def buscar_amplificadores(request):
+    if request.method == "POST":
+        am_formulario = BuscaAmplificadorForm(request.POST) 
+
+        if am_formulario.is_valid():
+            informacion = am_formulario.cleaned_data
+            
+            amplificadores = Amplificador.objects.filter(marca__icontains=informacion["marca"])
+
+            return render(request, "app/mostrar_amplificadores.html", {"marcas": amplificadores})
+    else:
+        am_formulario = BuscaAmplificadorForm()
+
+    return render(request, "app/buscar_amplificadores.html", {"am_formulario": am_formulario})
+
+def buscar_efectos(request):
+    if request.method == "POST":
+        ef_formulario = BuscaAmplificadorForm(request.POST) 
+
+        if ef_formulario.is_valid():
+            informacion = ef_formulario.cleaned_data
+            
+            efectos = Efecto.objects.filter(marca__icontains=informacion["marca"])
+
+            return render(request, "app/mostrar_efectos.html", {"marcas": efectos})
+    else:
+        ef_formulario = BuscaEfectoForm()
+
+    return render(request, "app/buscar_efectos.html", {"ef_formulario": ef_formulario})
